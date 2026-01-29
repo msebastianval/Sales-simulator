@@ -1,12 +1,16 @@
 package com.msv.controller.entity;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Builder
 @Getter
+@EqualsAndHashCode
+@ToString
 public class PriceResponse {
     private String brandId;
 

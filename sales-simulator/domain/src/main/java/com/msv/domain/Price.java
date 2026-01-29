@@ -1,10 +1,12 @@
 package com.msv.domain;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Builder
+@Getter
 public class Price {
     private String brandId;
 

@@ -1,18 +1,47 @@
 package com.msv.controller;
 
-import lombok.NoArgsConstructor;
+import com.msv.application.SalesService;
+import com.msv.application.entity.PriceRequest;
+import com.msv.controller.entity.PriceResponse;
+import com.msv.controller.mapper.PriceControllerMapper;
+import com.msv.domain.Price;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/v1/sales")
-@NoArgsConstructor
+@AllArgsConstructor
 public class SalesController {
 
+    private SalesService salesService;
+    private PriceControllerMapper mapper;
+
     @GetMapping
-    public ResponseEntity<String> getSales(){
-        return ResponseEntity.ok("Sales");
+    public ResponseEntity<PriceResponse> getSales(
+            @RequestParam LocalDateTime applicationDate,
+            @RequestParam String productId,
+            @RequestParam String chainId
+    ){
+        if(applicationDate == null || productId == null || chainId == null)
+        {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            Price price = salesService.getPrice(PriceRequest.builder()
+                    .applicationDate(applicationDate)
+                    .productId(productId)
+                    .chainId(chainId)
+                    .build());
+            return ResponseEntity.ok(mapper.toResponse(price));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 }
