@@ -30,7 +30,7 @@ class PriceServiceImplTest {
     private PriceServiceImpl priceService;
 
     @Test
-    void getPrice() {
+    void getPrice() throws Exception {
         PriceRequest request = PriceRequest.builder()
                 .productId("1234")
                 .chainId("1")
