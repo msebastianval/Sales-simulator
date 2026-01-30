@@ -1,7 +1,7 @@
 package com.msv.controller.mapper;
 
 import com.msv.controller.entity.PriceResponse;
-import com.msv.domain.Price;
+import com.msv.domain.entity.Price;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -131,7 +131,7 @@ class PriceControllerMapperTest {
                                 .build(),
                         PriceResponse.builder()
                                 .build()
-                )
+                ), Arguments.of(null, null)
 
         );
     }
