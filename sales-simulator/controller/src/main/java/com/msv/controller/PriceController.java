@@ -1,10 +1,10 @@
 package com.msv.controller;
 
-import com.msv.application.SalesService;
+import com.msv.application.port.PriceService;
 import com.msv.application.entity.PriceRequest;
 import com.msv.controller.entity.PriceResponse;
 import com.msv.controller.mapper.PriceControllerMapper;
-import com.msv.domain.Price;
+import com.msv.domain.entity.Price;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/v1/sales")
 @AllArgsConstructor
-public class SalesController {
+public class PriceController {
 
-    private SalesService salesService;
+    private PriceService priceService;
     private PriceControllerMapper mapper;
 
     @GetMapping
@@ -33,7 +33,7 @@ public class SalesController {
             return ResponseEntity.badRequest().build();
         }
         try {
-            Price price = salesService.getPrice(PriceRequest.builder()
+            Price price = priceService.getPrice(PriceRequest.builder()
                     .applicationDate(applicationDate)
                     .productId(productId)
                     .chainId(chainId)
