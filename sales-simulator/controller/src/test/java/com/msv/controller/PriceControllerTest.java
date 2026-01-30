@@ -1,10 +1,10 @@
 package com.msv.controller;
 
-import com.msv.application.SalesService;
+import com.msv.application.port.PriceService;
 import com.msv.application.entity.PriceRequest;
 import com.msv.controller.entity.PriceResponse;
 import com.msv.controller.mapper.PriceControllerMapper;
-import com.msv.domain.Price;
+import com.msv.domain.entity.Price;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,16 +24,16 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-class SalesControllerTest {
+class PriceControllerTest {
 
     @Mock
-    private SalesService salesService;
+    private PriceService priceService;
 
     @Mock
     private PriceControllerMapper mapper;
 
     @InjectMocks
-    private SalesController salesController;
+    private PriceController salesController;
 
     @BeforeEach
     public void setUp() {
@@ -77,7 +77,7 @@ class SalesControllerTest {
                 .chainId("1")
                 .productId("35455")
                 .applicationDate(LocalDateTime.of(2020, Month.JUNE, 14, 10, 0)).build();
-        Mockito.doReturn(price).when(salesService).getPrice(request);
+        Mockito.doReturn(price).when(priceService).getPrice(request);
 
         Mockito.doReturn(PriceResponse.builder()
                 .brandId("1")
@@ -113,7 +113,7 @@ class SalesControllerTest {
                 .chainId("1")
                 .productId("35455")
                 .applicationDate(LocalDateTime.of(2020, Month.JUNE, 14, 10, 0)).build();
-        Mockito.doThrow(new Exception()).when(salesService).getPrice(request);
+        Mockito.doThrow(new Exception()).when(priceService).getPrice(request);
         ResponseEntity result = salesController.getSales(LocalDateTime.of(2020, Month.JUNE, 14, 10, 0), "35455", "1");
         ResponseEntity<PriceResponse> expected = ResponseEntity.notFound().build();
         assertEquals(expected, result);
