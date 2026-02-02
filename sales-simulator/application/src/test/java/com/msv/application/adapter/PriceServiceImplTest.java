@@ -16,6 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.time.Month;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 
 @ExtendWith(MockitoExtension.class)
 class PriceServiceImplTest {
@@ -30,7 +34,7 @@ class PriceServiceImplTest {
     private PriceServiceImpl priceService;
 
     @Test
-    void getPrice() {
+    void getPrice() throws Exception {
         PriceRequest request = PriceRequest.builder()
                 .productId("1234")
                 .chainId("1")
@@ -61,5 +65,34 @@ class PriceServiceImplTest {
         Mockito.doReturn(price).when(priceRepository).getPrice(priceCmd);
 
         Assertions.assertEquals(expected, priceService.getPrice(request));
+
+        verify(mapper).toCmd(request);
+        verify(mapper, times(1)).toCmd(any());
+        verify(priceRepository).getPrice(priceCmd);
+        verify(priceRepository, times(1)).getPrice(any());
     }
+
+    @Test
+    void getPriceNull() throws Exception {
+        PriceRequest request = PriceRequest.builder()
+                .productId("1234")
+                .chainId("1")
+                .applicationDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
+                .build();
+        PriceCmd priceCmd = PriceCmd.builder()
+                .productId("1234")
+                .chainId("1")
+                .applicationDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
+                .build();
+        Mockito.doReturn(priceCmd).when(mapper).toCmd(request);
+        Mockito.doReturn(null).when(priceRepository).getPrice(priceCmd);
+
+        Assertions.assertThrowsExactly(Exception.class, () -> priceService.getPrice(request));
+
+        verify(mapper).toCmd(request);
+        verify(mapper, times(1)).toCmd(any());
+        verify(priceRepository).getPrice(priceCmd);
+        verify(priceRepository, times(1)).getPrice(any());
+    }
+
 }

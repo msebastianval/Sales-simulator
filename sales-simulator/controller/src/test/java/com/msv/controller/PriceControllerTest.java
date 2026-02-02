@@ -22,6 +22,8 @@ import java.time.Month;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PriceControllerTest {
@@ -97,6 +99,11 @@ class PriceControllerTest {
                 .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
                 .build());
         assertEquals(expected, result);
+
+        verify(priceService).getPrice(request);
+        verify(priceService, times(1)).getPrice(any());
+        verify(mapper).toResponse(price);
+        verify(mapper, times(1)).toResponse(any());
     }
 
     @ParameterizedTest
@@ -104,6 +111,9 @@ class PriceControllerTest {
     void getSalesInputError(LocalDateTime applicationDate, String productId, String chainId, ResponseEntity<PriceResponse> expected) throws Exception {
 
         assertEquals(expected, salesController.getSales(applicationDate, productId, chainId));
+
+        verifyNoInteractions(priceService);
+        verifyNoInteractions(mapper);
     }
 
     @Test
@@ -117,5 +127,9 @@ class PriceControllerTest {
         ResponseEntity result = salesController.getSales(LocalDateTime.of(2020, Month.JUNE, 14, 10, 0), "35455", "1");
         ResponseEntity<PriceResponse> expected = ResponseEntity.notFound().build();
         assertEquals(expected, result);
+
+        verify(priceService).getPrice(request);
+        verify(priceService, times(1)).getPrice(any());
+        verifyNoInteractions(mapper);
     }
 }
