@@ -1,6 +1,6 @@
 package com.msv.controller.mapper;
 
-import com.msv.controller.entity.PriceResponse;
+import com.msv.controller.model.PriceResponse;
 import com.msv.domain.entity.Price;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -8,6 +8,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,14 +29,13 @@ class PriceControllerMapperTest {
                                 .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
                                 .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
                                 .build(),
-                        PriceResponse.builder()
+                        new PriceResponse()
                                 .brandId("1")
                                 .productId("35455")
                                 .price(10.0)
                                 .currency("EUR")
-                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
-                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
-                                .build()
+                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0).atOffset(ZoneOffset.UTC))
+                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59).atOffset(ZoneOffset.UTC))
                 ), Arguments.of(
                         Price.builder()
                                 .productId("35455")
@@ -43,13 +44,12 @@ class PriceControllerMapperTest {
                                 .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
                                 .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
                                 .build(),
-                        PriceResponse.builder()
+                        new PriceResponse()
                                 .productId("35455")
                                 .price(10.0)
                                 .currency("EUR")
-                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
-                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
-                                .build()
+                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0).atOffset(ZoneOffset.UTC))
+                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59).atOffset(ZoneOffset.UTC))
                 ),
                 Arguments.of(
                         Price.builder()
@@ -59,13 +59,12 @@ class PriceControllerMapperTest {
                                 .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
                                 .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
                                 .build(),
-                        PriceResponse.builder()
+                        new PriceResponse()
                                 .brandId("1")
                                 .price(10.0)
                                 .currency("EUR")
-                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
-                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
-                                .build()
+                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0).atOffset(ZoneOffset.UTC))
+                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59).atOffset(ZoneOffset.UTC))
                 ), Arguments.of(
                         Price.builder()
                                 .brandId("1")
@@ -74,13 +73,12 @@ class PriceControllerMapperTest {
                                 .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
                                 .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
                                 .build(),
-                        PriceResponse.builder()
+                        new PriceResponse()
                                 .brandId("1")
                                 .productId("35455")
                                 .currency("EUR")
-                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
-                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
-                                .build()
+                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0).atOffset(ZoneOffset.UTC))
+                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59).atOffset(ZoneOffset.UTC))
                 ), Arguments.of(
                         Price.builder()
                                 .brandId("1")
@@ -89,13 +87,12 @@ class PriceControllerMapperTest {
                                 .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
                                 .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
                                 .build(),
-                        PriceResponse.builder()
+                        new PriceResponse()
                                 .brandId("1")
                                 .productId("35455")
                                 .price(10.0)
-                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
-                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
-                                .build()
+                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0).atOffset(ZoneOffset.UTC))
+                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59).atOffset(ZoneOffset.UTC))
                 ), Arguments.of(
                         Price.builder()
                                 .brandId("1")
@@ -104,13 +101,12 @@ class PriceControllerMapperTest {
                                 .currency("EUR")
                                 .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
                                 .build(),
-                        PriceResponse.builder()
+                        new PriceResponse()
                                 .brandId("1")
                                 .productId("35455")
                                 .price(10.0)
                                 .currency("EUR")
-                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59))
-                                .build()
+                                .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 23, 59).atOffset(ZoneOffset.UTC))
                 ), Arguments.of(
                         Price.builder()
                                 .brandId("1")
@@ -119,18 +115,16 @@ class PriceControllerMapperTest {
                                 .currency("EUR")
                                 .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
                                 .build(),
-                        PriceResponse.builder()
+                        new PriceResponse()
                                 .brandId("1")
                                 .productId("35455")
                                 .price(10.0)
                                 .currency("EUR")
-                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0))
-                                .build()
+                                .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0).atOffset(ZoneOffset.UTC))
                 ), Arguments.of(
                         Price.builder()
                                 .build(),
-                        PriceResponse.builder()
-                                .build()
+                        new PriceResponse()
                 ), Arguments.of(null, null)
 
         );

@@ -1,4 +1,4 @@
-package com.msv.infrastructure;
+package com.msv.infrastructure.adapter;
 
 import com.msv.domain.entity.Price;
 import com.msv.domain.entity.PriceCmd;
@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PriceH2RepositoryTest {
+class PriceH2AdapterTest {
 
     @Mock
     private SpringDataPriceRepository springDataPriceRepository;
@@ -30,7 +30,7 @@ class PriceH2RepositoryTest {
     private PricesRepositoryMapper mapper;
 
     @InjectMocks
-    private PriceH2Repository priceH2Repository;
+    private PriceH2Adapter priceH2Adapter;
 
     private PriceCmd priceCmd;
     private PriceEntity priceEntity;
@@ -75,7 +75,7 @@ class PriceH2RepositoryTest {
         
         doReturn(price).when(mapper).mapToDomain(priceEntity);
 
-        Price result = priceH2Repository.getPrice(priceCmd);
+        Price result = priceH2Adapter.getPrice(priceCmd);
 
         assertNotNull(result);
         assertEquals(price.getProductId(), result.getProductId());
@@ -95,7 +95,7 @@ class PriceH2RepositoryTest {
                 priceCmd.getApplicationDate()
         );
 
-        Price result = priceH2Repository.getPrice(priceCmd);
+        Price result = priceH2Adapter.getPrice(priceCmd);
 
         assertNull(result);
         verify(springDataPriceRepository).findApplicablePrices(priceCmd.getProductId(), priceCmd.getChainId(), priceCmd.getApplicationDate());

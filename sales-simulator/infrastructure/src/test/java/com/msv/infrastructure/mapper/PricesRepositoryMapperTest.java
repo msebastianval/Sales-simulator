@@ -57,7 +57,7 @@ class PricesRepositoryMapperTest {
                 ),
                 Arguments.of(
                         PriceEntity.builder().build(),
-                        Price.builder().price(0.0).build()
+                        Price.builder().build()
                 ),
                 Arguments.of(null, null)
         );

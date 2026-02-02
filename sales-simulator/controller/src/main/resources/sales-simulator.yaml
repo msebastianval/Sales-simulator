@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: Sales Simulator API
+  description: API for querying product prices based on date, product, and brand.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+paths:
+  /v1/sales:
+    get:
+      summary: Retrieve applicable price
+      description: Returns the applicable price for a given product, brand, and date, considering priority logic.
+      operationId: getSales
+      parameters:
+        - name: applicationDate
+          in: query
+          required: true
+          description: The date for which the price is being queried (ISO-8601 LocalDateTime).
+          schema:
+            type: string
+            format: date-time
+            example: "2020-06-14T10:00:00"
+        - name: productId
+          in: query
+          required: true
+          description: The identifier of the product.
+          schema:
+            type: string
+            example: "35455"
+        - name: chainId
+          in: query
+          required: true
+          description: The identifier of the brand/chain.
+          schema:
+            type: string
+            example: "1"
+      responses:
+        '200':
+          description: Successful retrieval of the price.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '400':
+          description: Bad Request - missing or invalid parameters.
+        '404':
+          description: Not Found - no applicable price found for the given parameters.
+components:
+  schemas:
+    PriceResponse:
+      type: object
+      properties:
+        brandId:
+          type: string
+          example: "1"
+        productId:
+          type: string
+          example: "35455"
+        startDate:
+          type: string
+          format: date-time
+          example: "2020-06-14T00:00:00"
+        endDate:
+          type: string
+          format: date-time
+          example: "2020-12-31T23:59:59"
+        price:
+          type: number
+          format: double
+          example: 35.50
+        currency:
+          type: string
+          example: "EUR"

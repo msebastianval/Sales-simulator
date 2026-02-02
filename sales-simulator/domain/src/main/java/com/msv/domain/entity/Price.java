@@ -20,7 +20,7 @@ public class Price {
 
     private LocalDateTime endDate;
 
-    private double price;
+    private Double price;
 
     private String currency;
 }

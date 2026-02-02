@@ -18,7 +18,7 @@ public class PricesRepositoryMapper {
                 .productId(entity.getProductId())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
-                .price(entity.getPrice() != null ? entity.getPrice() : 0.0)
+                .price(entity.getPrice())
                 .currency(entity.getCurrency())
                 .build();
     }

@@ -1,4 +1,4 @@
-package com.msv.infrastructure;
+package com.msv.infrastructure.adapter;
 
 import com.msv.domain.entity.Price;
 import com.msv.domain.entity.PriceCmd;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class PriceH2Repository implements PriceRepository {
+public class PriceH2Adapter implements PriceRepository {
 
     private final SpringDataPriceRepository springDataPriceRepository;
 
