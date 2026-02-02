@@ -16,6 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.time.Month;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 
 @ExtendWith(MockitoExtension.class)
 class PriceServiceImplTest {
@@ -61,6 +65,11 @@ class PriceServiceImplTest {
         Mockito.doReturn(price).when(priceRepository).getPrice(priceCmd);
 
         Assertions.assertEquals(expected, priceService.getPrice(request));
+
+        verify(mapper).toCmd(request);
+        verify(mapper, times(1)).toCmd(any());
+        verify(priceRepository).getPrice(priceCmd);
+        verify(priceRepository, times(1)).getPrice(any());
     }
 
     @Test
@@ -79,6 +88,11 @@ class PriceServiceImplTest {
         Mockito.doReturn(null).when(priceRepository).getPrice(priceCmd);
 
         Assertions.assertThrowsExactly(Exception.class, () -> priceService.getPrice(request));
+
+        verify(mapper).toCmd(request);
+        verify(mapper, times(1)).toCmd(any());
+        verify(priceRepository).getPrice(priceCmd);
+        verify(priceRepository, times(1)).getPrice(any());
     }
 
 }

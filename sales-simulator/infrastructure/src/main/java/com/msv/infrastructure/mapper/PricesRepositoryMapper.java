@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 public class PricesRepositoryMapper {
 
     public Price mapToDomain(PriceEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         return Price.builder()
                 .brandId(entity.getBrandId())
                 .productId(entity.getProductId())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
-                .price(entity.getPrice())
+                .price(entity.getPrice() != null ? entity.getPrice() : 0.0)
                 .currency(entity.getCurrency())
                 .build();
     }
