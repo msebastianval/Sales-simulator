@@ -62,4 +62,23 @@ class PriceServiceImplTest {
 
         Assertions.assertEquals(expected, priceService.getPrice(request));
     }
+
+    @Test
+    void getPriceNull() throws Exception {
+        PriceRequest request = PriceRequest.builder()
+                .productId("1234")
+                .chainId("1")
+                .applicationDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
+                .build();
+        PriceCmd priceCmd = PriceCmd.builder()
+                .productId("1234")
+                .chainId("1")
+                .applicationDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
+                .build();
+        Mockito.doReturn(priceCmd).when(mapper).toCmd(request);
+        Mockito.doReturn(null).when(priceRepository).getPrice(priceCmd);
+
+        Assertions.assertThrowsExactly(Exception.class, () -> priceService.getPrice(request));
+    }
+
 }
