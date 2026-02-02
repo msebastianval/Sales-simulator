@@ -1,12 +1,16 @@
-package com.msv.domain;
+package com.msv.domain.entity;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Builder
 @Getter
+@EqualsAndHashCode
+@ToString
 public class Price {
     private String brandId;
 
@@ -16,7 +20,7 @@ public class Price {
 
     private LocalDateTime endDate;
 
-    private double price;
+    private Double price;
 
     private String currency;
 }
