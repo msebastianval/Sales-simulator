@@ -20,6 +20,7 @@ public class PricesRepositoryMapper {
                 .endDate(entity.getEndDate())
                 .price(entity.getPrice())
                 .currency(entity.getCurrency())
+                .priority(entity.getPriority())
                 .build();
     }
 }
