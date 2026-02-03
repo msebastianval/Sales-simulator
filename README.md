@@ -21,7 +21,7 @@ The goal of this project is to provide a REST API that allows querying the appli
 
 The project follows **Hexagonal Architecture** (Ports and Adapters) to ensure a clean separation between domain logic and infrastructure/delivery details.
 
-It's a simple, one-endpoint application, to showcase the use of Hexagonal Architecture and all its components. 
+It's a simple, one-endpoint application, to showcase the use of Hexagonal Architecture and all its components.
 
 ## Main Technologies
 - **Java 21** (standard for modern Spring Boot applications)
@@ -132,10 +132,14 @@ mvn test
 - **API-First Development**: Integrating OpenAPI Generator into the build process to ensure the controller implementation stays in sync with the API specification.
 - **Timezone Management**: Switching from `LocalDateTime` to `OffsetDateTime` in the API layer to properly handle temporal data in a global context, while keeping the domain/persistence layers focused on local business hours.
 - **Overlapping Price Logic**: Correctly implementing the priority-based selection when multiple price ranges overlap for the same product and brand.
-- **Data Consistency**: Ensuring that the mapping between database entities and domain objects handles null values and data types correctly across different layers.
+- **Parameter Validation**: Ensuring that `@NotNull` and other constraints from the OpenAPI specification are correctly enforced at the controller level, and providing meaningful error messages to the client.
+- **Global Error Handling**: Implementing a `@RestControllerAdvice` (`ExceptionController`) to provide consistent error responses for:
+    - `404 Not Found`: When no price matches the criteria (using a custom `PriceNotFoundException`).
+    - `400 Bad Request`: When required parameters are missing or have incorrect types.
+- **Integration Testing**: Creating a comprehensive integration test to cover edge cases, including missing parameters, invalid types, and non-existent prices.
+
 
 ### Potential Improvements
-- **Global Error Handling**: Implement a `@ControllerAdvice` to provide more detailed and consistent error responses (e.g., using RFC 7807 Problem Details).
 - **Caching**: Implement a caching layer (e.g., Spring Cache with Redis or Caffeine) for frequently queried prices to improve performance.
 - **Persistence**: Transition from an in-memory H2 database to a persistent database (e.g., PostgreSQL) for production environments.
-- **Testing**: Increase coverage with more edge cases and performance tests to ensure the application scales effectively.
+- **Monitoring**: Add Spring Boot Actuator and Prometheus/Grafana for application monitoring.
