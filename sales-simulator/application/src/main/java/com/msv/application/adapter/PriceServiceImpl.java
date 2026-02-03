@@ -2,6 +2,7 @@ package com.msv.application.adapter;
 
 
 import com.msv.application.entity.PriceRequest;
+import com.msv.application.exception.PriceNotFoundException;
 import com.msv.application.mapper.PriceApplicationMapper;
 import com.msv.application.port.PriceService;
 import com.msv.domain.entity.Price;
@@ -18,9 +19,9 @@ public class PriceServiceImpl implements PriceService {
     private final PriceApplicationMapper mapper;
 
     @Override
-    public Price getPrice(PriceRequest request) throws Exception {
+    public Price getPrice(PriceRequest request) {
         Price price = priceRepository.getPrice(mapper.toCmd(request));
-        if(price == null) throw new Exception();
+        if(price == null) throw new PriceNotFoundException("Price not found for the given parameters");
         return price;
     }
 

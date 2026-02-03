@@ -1,6 +1,7 @@
 package com.msv.boot;
 
 import com.msv.controller.model.PriceResponse;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,8 +16,7 @@ import java.time.ZoneOffset;
 import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(classes = BootApplication.class)
 @AutoConfigureMockMvc
@@ -94,6 +94,25 @@ class SalesSimulatorITTest {
                 )
 
         );
+
+
+    }
+
+    private static Stream<Arguments> invalidTestCases() {
+        return Stream.of(
+                Arguments.of(
+                        "/v1/sales?applicationDate=&productId=35455&chainId=1",
+                        "Missing parameter: applicationDate"),
+                Arguments.of(
+                        "/v1/sales?applicationDate=2020-06-14T10:00:00Z&chainId=1",
+                        "Missing parameter: productId"),
+                Arguments.of(
+                        "/v1/sales?applicationDate=2020-06-14T10:00:00Z&productId=35455",
+                        "Missing parameter: chainId"),
+                Arguments.of(
+                        "/v1/sales",
+                        "Missing parameter: applicationDate")
+        );
     }
     @ParameterizedTest
     @MethodSource("testCases")
@@ -107,6 +126,22 @@ class SalesSimulatorITTest {
                 .andExpect(jsonPath("$.startDate").value(expected.getStartDate().toInstant().toString()))
                 .andExpect(jsonPath("$.endDate").value(expected.getEndDate().toInstant().toString()))
                 .andExpect(jsonPath("$.currency").value(expected.getCurrency()));
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidTestCases")
+    void whenParameterMissing_thenReturnsBadRequest(String request, String expectedMessage) throws Exception {
+        mockMvc.perform(get(request).accept("application/json"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(expectedMessage));
+
+    }
+
+    @Test
+    void whenPriceNotFound_thenReturnsNotFound() throws Exception {
+        mockMvc.perform(get("/v1/sales?applicationDate=2025-06-14T10:00:00Z&productId=99999&chainId=1").accept("application/json"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Price not found for the given parameters"));
     }
 
 }
