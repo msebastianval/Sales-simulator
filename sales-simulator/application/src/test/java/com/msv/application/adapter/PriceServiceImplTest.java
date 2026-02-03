@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -63,7 +65,7 @@ class PriceServiceImplTest {
                 .currency("EUR")
                 .build();
         Mockito.doReturn(priceCmd).when(mapper).toCmd(request);
-        Mockito.doReturn(price).when(priceRepository).getPrice(priceCmd);
+        Mockito.doReturn(List.of(price)).when(priceRepository).getPrice(priceCmd);
 
         Assertions.assertEquals(expected, priceService.getPrice(request));
 
@@ -86,7 +88,7 @@ class PriceServiceImplTest {
                 .applicationDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
                 .build();
         Mockito.doReturn(priceCmd).when(mapper).toCmd(request);
-        Mockito.doReturn(null).when(priceRepository).getPrice(priceCmd);
+        Mockito.doReturn(Collections.emptyList()).when(priceRepository).getPrice(priceCmd);
 
         Assertions.assertThrowsExactly(PriceNotFoundException.class, () -> priceService.getPrice(request));
 
@@ -94,6 +96,29 @@ class PriceServiceImplTest {
         verify(mapper, times(1)).toCmd(any());
         verify(priceRepository).getPrice(priceCmd);
         verify(priceRepository, times(1)).getPrice(any());
+    }
+
+    @Test
+    void getPriceWithPriority() {
+        PriceRequest request = PriceRequest.builder()
+                .productId("1234")
+                .chainId("1")
+                .applicationDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
+                .build();
+        PriceCmd priceCmd = PriceCmd.builder()
+                .productId("1234")
+                .chainId("1")
+                .applicationDate(LocalDateTime.of(2020, Month.JANUARY, 1, 0, 0))
+                .build();
+        Price price1 = Price.builder().priority(0).price(10.0).build();
+        Price price2 = Price.builder().priority(1).price(20.0).build();
+
+        Mockito.doReturn(priceCmd).when(mapper).toCmd(request);
+        Mockito.doReturn(List.of(price1, price2)).when(priceRepository).getPrice(priceCmd);
+
+        Price result = priceService.getPrice(request);
+
+        Assertions.assertEquals(price2, result);
     }
 
 }

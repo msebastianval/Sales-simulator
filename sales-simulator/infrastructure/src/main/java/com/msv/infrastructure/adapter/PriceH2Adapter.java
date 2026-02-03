@@ -20,7 +20,7 @@ public class PriceH2Adapter implements PriceRepository {
     private final PricesRepositoryMapper mapper;
 
     @Override
-    public Price getPrice(PriceCmd cmd) {
+    public List<Price> getPrice(PriceCmd cmd) {
         List<PriceEntity> prices = springDataPriceRepository.findApplicablePrices(
                 cmd.getProductId(),
                 cmd.getChainId(),
@@ -28,9 +28,8 @@ public class PriceH2Adapter implements PriceRepository {
         );
 
         return prices.stream()
-                .findFirst()
                 .map(mapper::mapToDomain)
-                .orElse(null);
+                .toList();
     }
 
 }

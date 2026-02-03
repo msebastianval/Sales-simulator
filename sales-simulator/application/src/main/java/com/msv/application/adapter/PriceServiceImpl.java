@@ -10,6 +10,9 @@ import com.msv.domain.repository.PriceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
+import java.util.List;
+
 @AllArgsConstructor
 @Component
 public class PriceServiceImpl implements PriceService {
@@ -20,9 +23,11 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public Price getPrice(PriceRequest request) {
-        Price price = priceRepository.getPrice(mapper.toCmd(request));
-        if(price == null) throw new PriceNotFoundException("Price not found for the given parameters");
-        return price;
+        List<Price> prices = priceRepository.getPrice(mapper.toCmd(request));
+
+        return prices.stream()
+                .max(Comparator.comparingInt(Price::getPriority))
+                .orElseThrow(() -> new PriceNotFoundException("Price not found for the given parameters"));
     }
 
 }
