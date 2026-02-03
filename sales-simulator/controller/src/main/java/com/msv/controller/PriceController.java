@@ -25,20 +25,11 @@ public class PriceController implements DefaultApi{
             String productId,
             String chainId
     ){
-        if(applicationDate == null || productId == null || chainId == null)
-        {
-            return ResponseEntity.badRequest().build();
-        }
-        try {
-            Price price = priceService.getPrice(PriceRequest.builder()
-                    .applicationDate(applicationDate.toLocalDateTime())
-                    .productId(productId)
-                    .chainId(chainId)
-                    .build());
-            return ResponseEntity.ok(mapper.toResponse(price));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-
+        Price price = priceService.getPrice(PriceRequest.builder()
+                .applicationDate(applicationDate.toLocalDateTime())
+                .productId(productId)
+                .chainId(chainId)
+                .build());
+        return ResponseEntity.ok(mapper.toResponse(price));
     }
 }

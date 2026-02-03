@@ -1,6 +1,7 @@
 package com.msv.application.adapter;
 
 import com.msv.application.entity.PriceRequest;
+import com.msv.application.exception.PriceNotFoundException;
 import com.msv.application.mapper.PriceApplicationMapper;
 import com.msv.domain.entity.Price;
 import com.msv.domain.entity.PriceCmd;
@@ -34,7 +35,7 @@ class PriceServiceImplTest {
     private PriceServiceImpl priceService;
 
     @Test
-    void getPrice() throws Exception {
+    void getPrice() {
         PriceRequest request = PriceRequest.builder()
                 .productId("1234")
                 .chainId("1")
@@ -73,7 +74,7 @@ class PriceServiceImplTest {
     }
 
     @Test
-    void getPriceNull() throws Exception {
+    void getPriceNull() {
         PriceRequest request = PriceRequest.builder()
                 .productId("1234")
                 .chainId("1")
@@ -87,7 +88,7 @@ class PriceServiceImplTest {
         Mockito.doReturn(priceCmd).when(mapper).toCmd(request);
         Mockito.doReturn(null).when(priceRepository).getPrice(priceCmd);
 
-        Assertions.assertThrowsExactly(Exception.class, () -> priceService.getPrice(request));
+        Assertions.assertThrowsExactly(PriceNotFoundException.class, () -> priceService.getPrice(request));
 
         verify(mapper).toCmd(request);
         verify(mapper, times(1)).toCmd(any());
