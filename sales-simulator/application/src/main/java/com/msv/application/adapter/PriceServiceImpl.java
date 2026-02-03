@@ -2,12 +2,16 @@ package com.msv.application.adapter;
 
 
 import com.msv.application.entity.PriceRequest;
+import com.msv.application.exception.PriceNotFoundException;
 import com.msv.application.mapper.PriceApplicationMapper;
 import com.msv.application.port.PriceService;
 import com.msv.domain.entity.Price;
 import com.msv.domain.repository.PriceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Comparator;
+import java.util.List;
 
 @AllArgsConstructor
 @Component
@@ -18,10 +22,12 @@ public class PriceServiceImpl implements PriceService {
     private final PriceApplicationMapper mapper;
 
     @Override
-    public Price getPrice(PriceRequest request) throws Exception {
-        Price price = priceRepository.getPrice(mapper.toCmd(request));
-        if(price == null) throw new Exception();
-        return price;
+    public Price getPrice(PriceRequest request) {
+        List<Price> prices = priceRepository.getPrice(mapper.toCmd(request));
+
+        return prices.stream()
+                .max(Comparator.comparingInt(Price::getPriority))
+                .orElseThrow(() -> new PriceNotFoundException("Price not found for the given parameters"));
     }
 
 }

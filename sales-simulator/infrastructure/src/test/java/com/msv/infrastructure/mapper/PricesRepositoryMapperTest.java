@@ -45,6 +45,7 @@ class PricesRepositoryMapperTest {
                                 .endDate(LocalDateTime.of(2021, Month.JANUARY, 1, 20, 0))
                                 .price(20.0)
                                 .currency("USD")
+                                .priority(1)
                                 .build(),
                         Price.builder()
                                 .brandId("2")
@@ -53,11 +54,12 @@ class PricesRepositoryMapperTest {
                                 .endDate(LocalDateTime.of(2021, Month.JANUARY, 1, 20, 0))
                                 .price(20.0)
                                 .currency("USD")
+                                .priority(1)
                                 .build()
                 ),
                 Arguments.of(
-                        PriceEntity.builder().build(),
-                        Price.builder().build()
+                        PriceEntity.builder().priority(0).build(),
+                        Price.builder().priority(0).build()
                 ),
                 Arguments.of(null, null)
         );

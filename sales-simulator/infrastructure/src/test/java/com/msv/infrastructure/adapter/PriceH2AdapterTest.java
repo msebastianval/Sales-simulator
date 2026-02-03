@@ -66,7 +66,7 @@ class PriceH2AdapterTest {
     }
 
     @Test
-    void getPrice_whenPriceExists_shouldReturnMappedPrice() {
+    void getPrice() {
         doReturn(List.of(priceEntity)).when(springDataPriceRepository).findApplicablePrices(
                 priceCmd.getProductId(),
                 priceCmd.getChainId(),
@@ -75,12 +75,13 @@ class PriceH2AdapterTest {
         
         doReturn(price).when(mapper).mapToDomain(priceEntity);
 
-        Price result = priceH2Adapter.getPrice(priceCmd);
+        List<Price> result = priceH2Adapter.getPrice(priceCmd);
 
         assertNotNull(result);
-        assertEquals(price.getProductId(), result.getProductId());
-        assertEquals(price.getBrandId(), result.getBrandId());
-        assertEquals(price.getPrice(), result.getPrice());
+        assertEquals(1, result.size());
+        assertEquals(price.getProductId(), result.getFirst().getProductId());
+        assertEquals(price.getBrandId(), result.getFirst().getBrandId());
+        assertEquals(price.getPrice(), result.getFirst().getPrice());
         verify(springDataPriceRepository).findApplicablePrices(priceCmd.getProductId(), priceCmd.getChainId(), priceCmd.getApplicationDate());
         verify(springDataPriceRepository, times(1)).findApplicablePrices(any(), any(), any());
         verify(mapper).mapToDomain(priceEntity);
@@ -88,16 +89,17 @@ class PriceH2AdapterTest {
     }
 
     @Test
-    void getPrice_whenPriceDoesNotExist_shouldReturnNull() {
+    void getPriceEmpty() {
         doReturn(Collections.emptyList()).when(springDataPriceRepository).findApplicablePrices(
                 priceCmd.getProductId(),
                 priceCmd.getChainId(),
                 priceCmd.getApplicationDate()
         );
 
-        Price result = priceH2Adapter.getPrice(priceCmd);
+        List<Price> result = priceH2Adapter.getPrice(priceCmd);
 
-        assertNull(result);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
         verify(springDataPriceRepository).findApplicablePrices(priceCmd.getProductId(), priceCmd.getChainId(), priceCmd.getApplicationDate());
         verify(springDataPriceRepository, times(1)).findApplicablePrices(any(), any(), any());
         verifyNoInteractions(mapper);

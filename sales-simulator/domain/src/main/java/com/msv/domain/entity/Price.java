@@ -23,4 +23,6 @@ public class Price {
     private Double price;
 
     private String currency;
+
+    private int priority;
 }

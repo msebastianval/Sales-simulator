@@ -20,6 +20,7 @@ paths:
           schema:
             type: string
             format: date-time
+            nullable: false
             example: "2020-06-14T10:00:00"
         - name: productId
           in: query
@@ -27,6 +28,7 @@ paths:
           description: The identifier of the product.
           schema:
             type: string
+            nullable: false
             example: "35455"
         - name: chainId
           in: query
@@ -34,6 +36,7 @@ paths:
           description: The identifier of the brand/chain.
           schema:
             type: string
+            nullable: false
             example: "1"
       responses:
         '200':
